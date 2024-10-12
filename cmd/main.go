@@ -6,12 +6,16 @@ import (
 	"TodoApp/internal/handler"
 	"TodoApp/internal/repository"
 	"TodoApp/internal/service"
+	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -37,6 +41,8 @@ func main() {
 		err = db.Close()
 		if err != nil {
 			logrus.Fatalf("error closing DB: %s", err.Error())
+		} else {
+			logrus.Infof("DB closed")
 		}
 	}(db)
 
@@ -49,7 +55,25 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 	srv := new(TodoApp.Server)
-	if err = srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("error occured while running http server: %v", err)
+
+	go func() {
+		if err = srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+			logrus.Fatalf("error occured while running http server: %v", err)
+		}
+	}()
+
+	logrus.Info("server started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	logrus.Info("server shutting down")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err = srv.Shutdown(ctx); err != nil {
+		logrus.Errorf("error shutting down http server: %v", err)
+	} else {
+		logrus.Info("server stopped")
 	}
 }

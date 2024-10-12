@@ -2,7 +2,7 @@ port: "8080"
 
 db:
   username: "root"
-  host: "localhost"
+  host: "db"
   port: "5432"
   name: "todo_db"
   sslmode: "disable"

@@ -1,0 +1,453 @@
+basePath: /
+definitions:
+  handler.SignInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.TodoItem:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  model.TodoList:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  model.UpdateItemInput:
+    properties:
+      description:
+        type: string
+      done:
+        type: boolean
+      title:
+        type: string
+    type: object
+  model.UpdateListInput:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  model.User:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Todo App API
+  version: "1.0"
+paths:
+  /api/items/{id}:
+    delete:
+      description: delete item by id
+      operationId: update-item-by-id
+      parameters:
+      - description: item id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: deleteItem
+      tags:
+      - item
+    get:
+      description: get item by id
+      operationId: get-item-by-id
+      parameters:
+      - description: item id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: getItemById
+      tags:
+      - item
+    put:
+      consumes:
+      - application/json
+      description: update item by id
+      operationId: update-item-by-id
+      parameters:
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: item info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateItemInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: updateItem
+      tags:
+      - item
+  /api/lists:
+    get:
+      description: get all lists
+      operationId: get-all-lists
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: getAllLists
+      tags:
+      - list
+    post:
+      consumes:
+      - application/json
+      description: create list
+      operationId: create-list
+      parameters:
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: createList
+      tags:
+      - list
+  /api/lists/{id}:
+    delete:
+      description: delete list
+      operationId: delete-list
+      parameters:
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: deleteList
+      tags:
+      - list
+    get:
+      description: get list by ids
+      operationId: get-list-by-id
+      parameters:
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: getListById
+      tags:
+      - list
+    put:
+      consumes:
+      - application/json
+      description: update lists
+      operationId: update-list
+      parameters:
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateListInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: updateList
+      tags:
+      - list
+  /api/lists/{id}/items:
+    get:
+      description: get all items
+      operationId: get-all-items
+      parameters:
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: getAllItems
+      tags:
+      - item
+    post:
+      consumes:
+      - application/json
+      description: creates an item
+      operationId: create-item
+      parameters:
+      - description: item info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.TodoItem'
+      - description: list id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: createItem
+      tags:
+      - item
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: authorize account
+      operationId: authorize-account
+      parameters:
+      - description: sign in info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: signIn
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: signUp
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

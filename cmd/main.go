@@ -3,6 +3,7 @@ package main
 import (
 	"TodoApp"
 	"TodoApp/cfg"
+	_ "TodoApp/docs"
 	"TodoApp/internal/handler"
 	"TodoApp/internal/repository"
 	"TodoApp/internal/service"
@@ -17,6 +18,17 @@ import (
 	"syscall"
 	"time"
 )
+
+// @title Todo App API
+// @version 1.0
+// description API server for TODO list application
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apiKey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))

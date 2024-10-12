@@ -2,7 +2,11 @@ package handler
 
 import (
 	"TodoApp/internal/service"
+	"errors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 )
 
 type Handler struct {
@@ -45,6 +49,23 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			items.DELETE("/:id", h.deleteItem)
 		}
 	}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return router
+}
+
+func getUserId(c *gin.Context) (int, error) {
+	id, ok := c.Get(userCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user is not found")
+		return 0, errors.New("user is not found")
+	}
+
+	idInt, ok := id.(int)
+	if !ok {
+		newErrorResponse(c, http.StatusInternalServerError, "user id is of invalid type")
+		return 0, errors.New("user id is of invalid type")
+	}
+
+	return idInt, nil
 }
